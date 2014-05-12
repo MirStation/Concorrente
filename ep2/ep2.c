@@ -1,4 +1,5 @@
 #include <pthread.h>
+#include <unistd.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -86,8 +87,16 @@ int main(int argc, char** argv) {
     exit(1);
   }
   
-  /*DEBUG: input values*/
-  printf("num_threads: %d\nstop_type:%c\nstop_value:%f\noutput_setup:%s\n",num_threads,stop_setup,stop_value,(output_setup == '\0' ? "default" : (output_setup == 'd' ? "d":"s")));
+  /*DEBUG: checking input values*/
+  printf("DEBUG -> num_threads: %d\nstop_type:%c\nstop_value:%f\noutput_setup:%s\n",num_threads,stop_setup,stop_value,(output_setup == '\0' ? "default" : (output_setup == 'd' ? "d":"s")));
+
+  if (num_threads == 0) {
+    /*Get the number of cpu cores in a linux OS*/
+    num_threads = sysconf(_SC_NPROCESSORS_CONF);
+  }
+
+  /*DEBUG: num_threads must be equal to the number of cpu cores in this (linux) machine*/
+  printf("DEBUG -> num_threads: %d\ncpu_cores:%ld\n",num_threads, sysconf(_SC_NPROCESSORS_CONF));
 
   return 0;
 }
