@@ -24,7 +24,7 @@ int is_natural(char* str) {
 }
 
 /*Function that checks if a string is a valid positive real number. 
-  If 'str' is a valid positive real number (including zero) the function 
+  If 'str' is a valid POSITIVE REAL number (including zero) the function 
   returns the value in 'preal', otherwise the it returns -1.*/
 int is_preal(char* str) {
   int preal = atof(str);
