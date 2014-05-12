@@ -1,8 +1,6 @@
-MAC0438-Programação Concorrente
+MAC0438 - Programação Concorrente
 
-Grupo:
-Igor Minotto
-António Miranda
+Grupo: Igor Minotto e António Miranda
 
 EP1:
 Simularção da última prova de uma temporada de Fórmula 1 fornecendo ao término da simulação a classificação final de pilotos e de construtores.
