@@ -92,7 +92,6 @@ void* compute_e_multi_t (void* argument) {
     sem_wait(&full);
     sem_wait(&mutexF);
     mpf_add(e, e, factorials[front]);
-    front= (front+1)%(num_threads-1);
     if (stop_setup == 'f') {
       mpf_sub(diff,e,past_e);
       if (mpf_cmp(diff,stop_value) < 0){
@@ -104,6 +103,7 @@ void* compute_e_multi_t (void* argument) {
 	stop = 1;
       }
     }
+    front= (front+1)%(num_threads-1);
     sem_post(&mutexF);
     sem_post(&empty);
     sem_wait(&mutexO);
@@ -332,6 +332,9 @@ int main(int argc, char** argv) {
       mpf_clear(factorials[i]);
     }
     free(factorials);
+    free(arrive);
+    free(go);
+    free(arrive_order);
   } else {
     /*Singlethread settings*/
     threads = (pthread_t *)malloc(num_threads*sizeof(pthread_t));
