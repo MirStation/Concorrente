@@ -19,7 +19,8 @@
 /*Keeps the number of threads to be used in e's calculation*/
 int num_threads;
 /*Variables used in the determiantion of the stop condition of e's calculation*/
-int stop;
+int stop = 0;
+int stop_all = 0;
 char stop_setup;
 mpf_t stop_value;
 /*Variables used in the computation of e*/
@@ -27,7 +28,7 @@ mpf_t e;
 mpf_t *factorials;
 /*Producer and Consumer variables*/
 int front=0, rear=0;
-sem_t empty, full, mutexF,mutexO;
+sem_t empty, full, mutexF,mutex;
 /*Barrier arrays*/
 int *arrive;
 int *go;
@@ -80,15 +81,15 @@ int is_preal(char* str) {
 /* Computation of the constant e for multithreads  */
 void* compute_e_multi_t (void* argument) {
   int tid;
-  mpf_t past_e;
   mpf_t diff;
+  mpf_t past_e;
   struct timespec tim, tim2;
   tid = *((int *)argument);
-  mpf_init(past_e);
   mpf_init(diff);
+  mpf_init(past_e);
   mpf_set(past_e, e);
   tim.tv_sec = 0;
-  while (!stop) {
+  while (!stop_all) {
     sem_wait(&full);
     sem_wait(&mutexF);
     mpf_add(e, e, factorials[front]);
@@ -99,26 +100,26 @@ void* compute_e_multi_t (void* argument) {
       }
       mpf_set(past_e, e);
     } else {
-      if (mpf_cmp(factorials[front],stop_value) < 0) {
+      if (mpf_cmp(factorials[tid],stop_value) < 0) {
 	stop = 1;
       }
     }
     front= (front+1)%(num_threads-1);
     sem_post(&mutexF);
     sem_post(&empty);
-    sem_wait(&mutexO);
+    sem_wait(&mutex);
     arrive[tid] = 1;
     arrive_order[order++] = tid;
     if (order == (num_threads-1)) order = 0;
-    sem_post(&mutexO);
+    sem_post(&mutex);
     while (go[tid] == 0) {
       tim.tv_nsec = rand()%1000;
       nanosleep(&tim,&tim2);
     }
     go[tid] = 0;
   }
-  mpf_clear(past_e);
   mpf_clear(diff);
+  mpf_clear(past_e);
   return NULL;
 }
 /* Function executed by the thread observer */
@@ -126,9 +127,9 @@ void* observer() {
   int i;
   struct timespec tim, tim2;
   tim.tv_sec = 0;
-  while (!stop) {
+  while (!stop_all) {
     for (i=0;i<(num_threads-1);i++) {
-      while (arrive[i] == 0 && !stop) { /*the variable stop may cause some troubles*/
+      while (arrive[i] == 0 && !stop_all) { /*the variable stop may cause some troubles*/
 	tim.tv_nsec = rand()%1000;
 	nanosleep(&tim,&tim2);
       }
@@ -145,6 +146,9 @@ void* observer() {
       printf("-> Partial value of e:\n");
       mpf_out_str(NULL,10,0,e);
       putchar('\n');
+    }
+    if(stop){
+      stop_all = 1;
     }
     for (i=0;i<(num_threads-1);i++) {
       go[i] = 1;
@@ -304,7 +308,7 @@ int main(int argc, char** argv) {
     assert(rc == 0);
     rc = sem_init(&mutexF,LOCAL,1);
     assert(rc == 0);
-    rc = sem_init(&mutexO,LOCAL,1);
+    rc = sem_init(&mutex,LOCAL,1);
     assert(rc == 0);
     for(i=0;i<(num_threads-1);i++) {
       threads_args[i]=i;
@@ -326,7 +330,7 @@ int main(int argc, char** argv) {
     assert(rc == 0);
     rc = sem_destroy(&mutexF);
     assert(rc == 0);
-    rc = sem_destroy(&mutexO);
+    rc = sem_destroy(&mutex);
     assert(rc == 0);
     for(i=0;i<(num_threads-1);i++) {
       mpf_clear(factorials[i]);
