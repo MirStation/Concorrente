@@ -1,7 +1,7 @@
 # Makefile
 CC = gcc
-FLAGS = -g -W -Wall -ansi -pedantic -O3
-LIBS = -lpthread -D_POSIX_C_SOURCE=199309L
+FLAGS = -g -Wall -ansi -pedantic -O3
+LIBS = -lpthread -D_POSIX_C_SOURCE=199309L -lgmp
 TARGET = ep2
 OBJECTS = ep2.o
 BACKUPDAY = `date +%y%m%d_%a_%H%M%S`
