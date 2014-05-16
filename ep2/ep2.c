@@ -2,7 +2,6 @@
 #include <semaphore.h>
 #include <unistd.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <ctype.h>
@@ -129,7 +128,7 @@ void* observer() {
   tim.tv_sec = 0;
   while (!stop_all) {
     for (i=0;i<(num_threads-1);i++) {
-      while (arrive[i] == 0 && !stop_all) { /*the variable stop may cause some troubles*/
+      while (arrive[i] == 0) {
 	tim.tv_nsec = rand()%1000;
 	nanosleep(&tim,&tim2);
       }
@@ -154,7 +153,7 @@ void* observer() {
       go[i] = 1;
     }
   }
-  for(i=0;i<(num_threads-1);i++){
+  for(i=0;i<(num_threads-1);i++){ /*is this necessary?*/
     go[i] = 1;
   }
   return NULL;
