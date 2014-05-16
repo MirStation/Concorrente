@@ -99,10 +99,18 @@ void* compute_e_multi_t (void* argument) {
       }
       mpf_set(past_e, e);
     } else {
-      if (mpf_cmp(factorials[tid],stop_value) < 0) {
+      /*printf("-> factorilas[%d]:\n",front);
+      mpf_out_str(NULL,10,0,factorials[front]);
+      putchar('\n');
+      printf("-> stop_value:\n");
+      mpf_out_str(NULL,10,0,stop_value);
+      putchar('\n');
+      printf("-> m_stop: %d\n",mpf_cmp(factorials[front],stop_value));*/
+      if (mpf_cmp(factorials[front],stop_value) < 0) {
 	stop = 1;
       }
     }
+    /*puts("O.O");*/
     front= (front+1)%(num_threads-1);
     sem_post(&mutexF);
     sem_post(&empty);
@@ -111,9 +119,11 @@ void* compute_e_multi_t (void* argument) {
     arrive_order[order++] = tid;
     if (order == (num_threads-1)) order = 0;
     sem_post(&mutex);
+    /*puts("-.-");*/
     while (go[tid] == 0) {
       tim.tv_nsec = rand()%1000;
       nanosleep(&tim,&tim2);
+      /*puts(":[");*/
     }
     go[tid] = 0;
   }
