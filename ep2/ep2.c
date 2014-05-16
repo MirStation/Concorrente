@@ -259,7 +259,7 @@ int main(int argc, char** argv) {
     }
     /*Processing the 3th argument*/
     if (is_preal(argv[3]) > -1) {
-      mpf_set_d(stop_value, atof(argv[3]));
+      mpf_set_str(stop_value, argv[3], 10);
     } else {
       printf("%s is not a valid positive real number!\n", argv[3]);
       exit(1);
