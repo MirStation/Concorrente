@@ -282,7 +282,7 @@ int main(int argc, char** argv) {
     }
     /*Processing the 4th argument (optinal)*/
     if (argc == 5) {
-      if (argv[4][0] == 'd' || argv[4][0] == 's') {
+      if (argv[4][0] == 'd' || argv[4][0] == 's' || argv[4][0] == 't') {
 	output_setup = argv[4][0]; 
       } else {
 	printf("%c is an invalid output setup!Output setup maintained default!\n", argv[4][0]);
@@ -368,19 +368,20 @@ int main(int argc, char** argv) {
     assert(rc == 0);
     
   }
-  if (output_setup == 's') {
-    printf("Terms found: %ld\n",k);
+  if (output_setup != 't') {
+    if (output_setup == 's') {
+      printf("Terms found: %ld\n",k);
+    } else {
+      printf("Total iterations: %ld\n",num_threads > 1 ? iter : k);
+    }
+    printf("Value of e:\n");
+    mpf_out_str(stdout,10,0,e);
+    putchar('\n');
   } else {
-    printf("Total iterations: %ld\n",num_threads > 1 ? iter : k);
+    clock_gettime(CLOCK_MONOTONIC, &tend);
+    timelapse = ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) - ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec);
+    printf("%.6f\n",timelapse * 1000);
   }
-  printf("Value of e:\n");
-  mpf_out_str(stdout,10,0,e);
-  putchar('\n');
-
-  clock_gettime(CLOCK_MONOTONIC, &tend);
-  timelapse = ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) - ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec);
-  printf("some_long_computation took about %.5f seconds\n",timelapse);
-
   free(threads);
   free(threads_args);
   mpf_clear(e);
