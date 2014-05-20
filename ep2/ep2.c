@@ -80,6 +80,7 @@ int is_preal(char* str) {
 /* Computation of the constant e for multithreads  */
 void* compute_e_multi_t (void* argument) {
   int tid;
+  /*int evalue, fvalue;*/
   mpf_t diff;
   mpf_t past_e;
   struct timespec tim, tim2;
@@ -89,8 +90,23 @@ void* compute_e_multi_t (void* argument) {
   mpf_set(past_e, e);
   tim.tv_sec = 0;
   while (!stop_all) {
+    /*sem_getvalue(&full,&fvalue);
+    printf("fvalue:%d\n",fvalue);
+    sem_getvalue(&empty,&evalue);
+    printf("evalue:%d\n",evalue);
+    printf("1ESC tid:%d\n",tid);*/
     sem_wait(&full);
+    /*sem_getvalue(&full,&fvalue);
+    printf("fvalue:%d\n",fvalue);
+    sem_getvalue(&empty,&evalue);
+    printf("evalue:%d\n",evalue);
+    printf("2ESC tid:%d\n",tid);*/
     sem_wait(&mutexF);
+    /*sem_getvalue(&full,&fvalue);
+    printf("fvalue:%d\n",fvalue);
+    sem_getvalue(&empty,&evalue);
+    printf("evalue:%d\n",evalue);
+    printf("3ESC tid:%d\n",tid);*/
     mpf_add(e, e, factorials[front]);
     if (stop_setup == 'f') {
       mpf_sub(diff,e,past_e);
@@ -99,31 +115,27 @@ void* compute_e_multi_t (void* argument) {
       }
       mpf_set(past_e, e);
     } else {
-      /*printf("-> factorilas[%d]:\n",front);
-      mpf_out_str(NULL,10,0,factorials[front]);
-      putchar('\n');
-      printf("-> stop_value:\n");
-      mpf_out_str(NULL,10,0,stop_value);
-      putchar('\n');
-      printf("-> m_stop: %d\n",mpf_cmp(factorials[front],stop_value));*/
       if (mpf_cmp(factorials[front],stop_value) < 0) {
 	stop = 1;
       }
     }
-    /*puts("O.O");*/
     front= (front+1)%(num_threads-1);
+    /*printf("front:%d\n",front);
+    printf("SSC tid:%d\n",tid);*/
     sem_post(&mutexF);
     sem_post(&empty);
+    /*sem_getvalue(&full,&fvalue);
+    printf("fvalue:%d\n",fvalue);
+    sem_getvalue(&empty,&evalue);
+    printf("evalue:%d\n",evalue);*/
     sem_wait(&mutex);
     arrive[tid] = 1;
     arrive_order[order++] = tid;
     if (order == (num_threads-1)) order = 0;
     sem_post(&mutex);
-    /*puts("-.-");*/
     while (go[tid] == 0) {
       tim.tv_nsec = rand()%1000;
       nanosleep(&tim,&tim2);
-      /*puts(":[");*/
     }
     go[tid] = 0;
   }
@@ -174,13 +186,16 @@ void* compute_factorials () {
   mpf_t uk;
   mpf_init(uk);
   mpf_set_d(uk,1);
-  while(!stop){
+  while(1){
     mpf_div_ui(uk,uk,k);
     sem_wait(&empty);
     mpf_set(factorials[rear],uk);
     rear = (rear+1)%(num_threads-1);
     sem_post(&full);
     k++;
+    if ((k-1)%(num_threads-1) == 0) { /*New stop condition - solves the loop bug - tested for 5000 calculations of e and 30 threads*/
+      if (stop) break;
+    }
   }
   mpf_clear(uk);
   return NULL;
@@ -318,9 +333,9 @@ int main(int argc, char** argv) {
     for(i=0;i<(num_threads-1);i++) {
       mpf_init(factorials[i]);
     }
-    rc = sem_init(&empty,SHARED,num_threads-1);
+    rc = sem_init(&empty,LOCAL,num_threads-1);
     assert(rc == 0);
-    rc = sem_init(&full,SHARED,0);
+    rc = sem_init(&full,LOCAL,0);
     assert(rc == 0);
     rc = sem_init(&mutexF,LOCAL,1);
     assert(rc == 0);
