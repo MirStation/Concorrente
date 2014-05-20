@@ -27,12 +27,12 @@ mpf_t e;
 mpf_t *factorials;
 /*Producer and Consumer variables*/
 int front=0, rear=0;
-sem_t empty, full, mutexF,mutex;
+sem_t empty, full, mutexF, mutex;
 /*Barrier arrays*/
 int *arrive;
 int *go;
 int *arrive_order;
-int order=0;
+int order = 0;
 /*Iterations*/
 long iter = 0;
 /*Terms*/
@@ -247,9 +247,16 @@ int main(int argc, char** argv) {
   pthread_t *threads;
   int *threads_args;
   int i, rc;
+  struct timespec tstart={0,0}, tend={0,0};
+  double timelapse;
+
   mpf_init(e);  /* Inicialization of e*/
   mpf_init(stop_value); /* Inicialization of stop_value*/
   mpf_set_d(e,1); /* Setting e with with one*/
+
+  /* timing */
+  clock_gettime(CLOCK_MONOTONIC, &tstart);
+
   /*Input processing*/
   if (argc >= 4) {
     /*Processing the 1th argument*/
@@ -367,8 +374,13 @@ int main(int argc, char** argv) {
     printf("Total iterations: %ld\n",num_threads > 1 ? iter : k);
   }
   printf("Value of e:\n");
-  mpf_out_str(NULL,10,0,e);
+  mpf_out_str(stdout,10,0,e);
   putchar('\n');
+
+  clock_gettime(CLOCK_MONOTONIC, &tend);
+  timelapse = ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) - ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec);
+  printf("some_long_computation took about %.5f seconds\n",timelapse);
+
   free(threads);
   free(threads_args);
   mpf_clear(e);

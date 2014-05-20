@@ -1,0 +1,56 @@
+\documentclass[a4paper,11pt]{article} % Formato do papel, tipo de documento e tamanho da fonte.
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel} % Hifenização em português
+\usepackage[T1]{fontenc} % Caracteres com acentos são considerados como um bloco
+\usepackage{ae} % Arruma a fonte quando usa o pacote acima
+\usepackage{amssymb} % Caracteres matemáticos especiais
+\usepackage[pdftex]{graphicx} % Para inserir figuras    
+\usepackage{indentfirst}
+\usepackage{float}
+
+\setlength{\parindent}{1cm}
+%\renewcommand{\theenumi}{\Alph{enumi}}
+
+\title{
+	\vspace{0 mm}
+	\huge{\textbf{MAC0438 - Programação Concorrente}} \\
+	\vspace{3 mm}
+	\huge{EP2 - Cálculo do número de Euler}
+	\vspace{0 mm}
+}
+
+\author	{
+	\Large{{ Antônio Miranda - Igor Canko Minotto}}	\\
+}
+\date{\Large{{ 22 de maio de 2014}}}
+
+
+\usepackage{graphicx}
+\begin{document}
+
+
+\maketitle
+
+\pagebreak 
+\tableofcontents
+
+\pagebreak
+\setcounter{section}{-1}
+
+\section{Introdução}
+  Para calcular o número de Euler, utilizamos a fórmula sugerida: \linebreak 
+  \centerline{ $e =\sum\limits_{n=0}^\infty \frac{1}{n!}$ } 
+  No nosso programa, utilizamos uma thread produtora para calcular os termos da somatória e outras $m-1$ threads consumidoras, sendo $m$ o primeiro argumento da linha de comando. 
+  
+\section{Ambiente}
+  Configuração da Máquina
+\section{Método}
+  Valores de entrada (f e m)
+  Como o tempo foi medido?	
+  Quantas repetições para cada um?
+\section{Análise dos Resultados}
+  Gráficos:
+    - Para cada quantidade de threads, média aritmética e desvio padrão.
+  Análise: foi o esperado?
+\end{document}
+
