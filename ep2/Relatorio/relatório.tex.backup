@@ -44,10 +44,12 @@
   
 \section{Ambiente}
   Configuração da Máquina.
+
 \section{Método}
   Valores de entrada (f e m).
   Como o tempo foi medido?	
   Quantas repetições para cada um?
+
 \section{Análise dos Resultados}
   Gráficos:
     - Para cada quantidade de threads, média aritmética e desvio padrão.

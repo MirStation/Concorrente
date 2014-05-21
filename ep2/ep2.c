@@ -10,6 +10,8 @@
 #include <time.h>
 #include "gmp.h"
 
+#define PREC_B 40000L
+#define PREC_D 10000L
 /*
  * VARIABLES AND CONSTANTS
  */
@@ -41,89 +43,15 @@ long iter = 0;
 long k = 1;
 /*Variables used to setup the output of the program*/
 char output_setup = '\0'; /*The default outup of the program is indicated by the char \0*/
-
+long int output_precision = 0L;
 /*
  * UTILITIES
  */
 
-/*Function that checks if a string is a valid natural number. 
-  If 'str' is a valid natural number (including zero) the function 
-  returns the value in 'natural', otherwise the it returns -1.
-  
-  OBS: If 'str' is a valid real number then 'natural' will be the truncation 
-  of 'str' without the decimals.*/
-int is_natural(char* str) {
-  int natural = atoi(str);
-  if (natural == 0 && str[0] != '0') {
-    /*Not a natural number*/
-    return -1;
-  }
-  /*Checks if natural is positive before returning.*/
-  return natural >= 0 ? natural : -1;
+void print_e(char *str) {
+  gmp_printf ("%s\n%.*Ff\n",str,output_precision, e);
 }
 
-/*Function that checks if a string is a valid positive real number or a valid 
-  positive real number in scientific notation. If 'str' is a valid POSITIVE REAL 
-  number (including zero) the function returns the value in 'preal', otherwise 
-  the it returns -1.*/
-int is_preal(char* str) {
-  int i;
-  int num_e;
-  int exp_n;
-  double real_n;
-  double preal;
-  char* aux;
-  char* exp;
-  char* real;
-  num_e = 0;
-  aux = strchr(str,'e');
-  for (i = 0; i< strlen(str);i++) {
-    if(isalpha(str[i])){
-      if (str[i] == 'e'){
-	num_e++;
-	if (num_e > 1) {
-	  /*Not a valid scientific notation*/
-	  return -1;
-	}
-      } else {
-	return -1;
-      }
-    }
-  }
-  real = strtok(str,"e");
-  exp = strtok(NULL,"e");
-  if(exp != NULL) {
-    exp_n = atoi(exp);
-    if (exp_n == 0 && exp[0] != '0') {
-      /*Not an integer*/
-      return -1;
-    }
-    real_n = atof(real);
-    if (real_n == 0 && real[0] != '0') {
-      /*Not a real number*/
-      return -1;
-    }
-    if (real_n >= 0) {
-      preal = atof(real) * pow(10,atoi(exp));
-    } else {
-      /*Not a positive real number*/
-      return -1;
-    }
-  } else {
-    real_n = atof(real);
-    if (real_n == 0 && real[0] != '0') {
-      /*Not a real number*/
-      return -1;
-    }
-    if (real_n >= 0) {
-      preal = atof(real);
-    } else {
-      /*Not a positive real number*/
-      return -1;
-    }
-  }
-  return preal;
-}
 /*
  * MULTITHREAD
  */
@@ -139,6 +67,8 @@ void* compute_e_multi_t (void* argument) {
   mpf_init(diff);
   mpf_init(past_e);
   mpf_set(past_e, e);
+  mpf_set_prec(diff,PREC_B);
+  mpf_set_prec(past_e,PREC_B);
   tim.tv_sec = 0;
   while (!stop_all) {
     /*sem_getvalue(&full,&fvalue);
@@ -158,13 +88,16 @@ void* compute_e_multi_t (void* argument) {
     sem_getvalue(&empty,&evalue);
     printf("evalue:%d\n",evalue);
     printf("3ESC tid:%d\n",tid);*/
-    mpf_add(e, e, factorials[front]);
+    if(stop != 1)
+      mpf_add(e, e, factorials[front]);
     if (stop_setup == 'f') {
       mpf_sub(diff,e,past_e);
       if (mpf_cmp(diff,stop_value) < 0){
+        mpf_set(e, past_e);
 	stop = 1;
+      } else {
+        mpf_set(past_e, e);
       }
-      mpf_set(past_e, e);
     } else {
       if (mpf_cmp(factorials[front],stop_value) < 0) {
 	stop = 1;
@@ -215,8 +148,7 @@ void* observer() {
 	printf("%d ",arrive_order[i]);
       }
       putchar('\n');
-      printf("-> Partial value of e:\n");
-      mpf_out_str(NULL,10,0,e);
+      print_e("Partial value of e:");
       putchar('\n');
     }
     if(stop){
@@ -237,6 +169,7 @@ void* compute_factorials () {
   mpf_t uk;
   mpf_init(uk);
   mpf_set_d(uk,1);
+  mpf_set_prec(uk,PREC_B);
   while(1){
     mpf_div_ui(uk,uk,k);
     sem_wait(&empty);
@@ -262,12 +195,17 @@ void* compute_e_single_t (void* argument) {
   mpf_t past_e;
   mpf_t diff;
   mpf_t uk;
+  
   tid = *((int *)argument);
   mpf_init(uk);
   mpf_set_d(uk,1);
   mpf_init(past_e);
   mpf_init(diff);
   mpf_set(past_e, e);
+
+  mpf_set_prec(uk, PREC_B);
+  mpf_set_prec(past_e, PREC_B);
+  mpf_set_prec(diff, PREC_B);
   while (1) {
     mpf_div_ui(uk,uk,k);
     mpf_add(e, e, uk);
@@ -284,9 +222,7 @@ void* compute_e_single_t (void* argument) {
     }
     k++;
     if (output_setup == 's') {
-      printf("Partial value of e:\n");
-      mpf_out_str(NULL,10,0,e);
-      putchar('\n');
+      print_e("Partial value of e:");
     } else if (output_setup == 'd') {
       printf("Iteration: %ld\n", k);
       printf("-> Arrived order at the barrier:\n");
@@ -294,9 +230,7 @@ void* compute_e_single_t (void* argument) {
 	printf("%d ",tid);
       }
       putchar('\n');
-      printf("-> Partial value of e:\n");
-      mpf_out_str(NULL,10,0,e);
-      putchar('\n');
+      print_e("Partial value of e:");
     }
   }
   mpf_clear(uk);
@@ -315,11 +249,11 @@ int main(int argc, char** argv) {
   int i, rc;
   struct timespec tstart={0,0}, tend={0,0};
   double timelapse;
-  char *argv3;
 
   mpf_init(e);  /* Inicialization of e*/
   mpf_init(stop_value); /* Inicialization of stop_value*/
   mpf_set_d(e,1); /* Setting e with with one*/
+  mpf_set_prec(e,PREC_B);
 
   /* timing */
   clock_gettime(CLOCK_MONOTONIC, &tstart);
@@ -327,12 +261,7 @@ int main(int argc, char** argv) {
   /*Input processing*/
   if (argc >= 4) {
     /*Processing the 1th argument*/
-    if (is_natural(argv[1]) > -1) {
-      num_threads = atoi(argv[1]);
-    } else {
-      printf("%s is not a valid natural number!\n", argv[1]);
-      exit(1);
-    }
+    num_threads = atoi(argv[1]);
     /*Processing the 2th argument*/
     if (argv[2][0] == 'm' || argv[2][0] == 'f') {
       stop_setup = argv[2][0];
@@ -341,16 +270,9 @@ int main(int argc, char** argv) {
       exit(1);
     }
     /*Processing the 3th argument*/
-    argv3 = malloc(sizeof(char)*strlen(argv[3]));
-    strcpy(argv3,argv[3]);
-    if (is_preal(argv[3]) > -1) {
-      mpf_set_str(stop_value, argv3, 10);
-    } else {
-      printf("%s is not a valid positive real number!\n", argv[3]);
-      free(argv3);
-      exit(1);
-    }
-    free(argv3);
+    output_precision = strlen(argv[3])-2;
+    mpf_set_prec(stop_value,PREC_B);
+    mpf_set_str(stop_value, argv[3], 10);
     /*Processing the 4th argument (optinal)*/
     if (argc == 5) {
       if (argv[4][0] == 'd' || argv[4][0] == 's' || argv[4][0] == 't') {
@@ -388,6 +310,7 @@ int main(int argc, char** argv) {
     assert(factorials);
     for(i=0;i<(num_threads-1);i++) {
       mpf_init(factorials[i]);
+      mpf_set_prec(factorials[i],PREC_B);
     }
     rc = sem_init(&empty,LOCAL,num_threads-1);
     assert(rc == 0);
@@ -445,9 +368,7 @@ int main(int argc, char** argv) {
     } else {
       printf("Total iterations: %ld\n",num_threads > 1 ? iter : k);
     }
-    printf("Value of e:\n");
-    mpf_out_str(stdout,10,0,e);
-    putchar('\n');
+    print_e("Final value of e:");
   } else {
     clock_gettime(CLOCK_MONOTONIC, &tend);
     timelapse = ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) - ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec);

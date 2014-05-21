@@ -43,11 +43,17 @@
   No nosso programa, utilizamos uma thread produtora para calcular os termos da somatória e outras $m-1$ threads consumidoras, sendo $m$ o primeiro argumento da linha de comando. 
   
 \section{Ambiente}
-  Configuração da Máquina
+  Configuração da Máquina.
+
 \section{Método}
-  Valores de entrada (f e m)
-  Como o tempo foi medido?	
+  Demos um valor de entrada 1e-2000, paras as opções f e m. Para medir o tempo de execução,
+fizemos a medição dentro do código utilizando a função clock_gettime() da librt (Realtime Extensions library).
+Pegamos o valor inicial do relógio no começo da função main, e o valor final logo antes do ponto de retorno da função.
+
+
+  Como o tempo foi medido?
   Quantas repetições para cada um?
+
 \section{Análise dos Resultados}
   Gráficos:
     - Para cada quantidade de threads, média aritmética e desvio padrão.
