@@ -124,7 +124,6 @@ int is_preal(char* str) {
   }
   return preal;
 }
-
 /*
  * MULTITHREAD
  */
@@ -316,6 +315,7 @@ int main(int argc, char** argv) {
   int i, rc;
   struct timespec tstart={0,0}, tend={0,0};
   double timelapse;
+  char *argv3;
 
   mpf_init(e);  /* Inicialization of e*/
   mpf_init(stop_value); /* Inicialization of stop_value*/
@@ -341,12 +341,16 @@ int main(int argc, char** argv) {
       exit(1);
     }
     /*Processing the 3th argument*/
+    argv3 = malloc(sizeof(char)*strlen(argv[3]));
+    strcpy(argv3,argv[3]);
     if (is_preal(argv[3]) > -1) {
-      mpf_set_str(stop_value, argv[3], 10);
+      mpf_set_str(stop_value, argv3, 10);
     } else {
       printf("%s is not a valid positive real number!\n", argv[3]);
+      free(argv3);
       exit(1);
     }
+    free(argv3);
     /*Processing the 4th argument (optinal)*/
     if (argc == 5) {
       if (argv[4][0] == 'd' || argv[4][0] == 's' || argv[4][0] == 't') {
