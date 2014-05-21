@@ -2,6 +2,8 @@
 #include <semaphore.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <string.h>
+#include <math.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <ctype.h>
@@ -60,17 +62,67 @@ int is_natural(char* str) {
   return natural >= 0 ? natural : -1;
 }
 
-/*Function that checks if a string is a valid positive real number. 
-  If 'str' is a valid POSITIVE REAL number (including zero) the function 
-  returns the value in 'preal', otherwise the it returns -1.*/
+/*Function that checks if a string is a valid positive real number or a valid 
+  positive real number in scientific notation. If 'str' is a valid POSITIVE REAL 
+  number (including zero) the function returns the value in 'preal', otherwise 
+  the it returns -1.*/
 int is_preal(char* str) {
-  int preal = atof(str);
-  if (preal == 0 && str[0] != '0') {
-    /*Not a real number*/
-    return -1;
+  int i;
+  int num_e;
+  int exp_n;
+  double real_n;
+  double preal;
+  char* aux;
+  char* exp;
+  char* real;
+  num_e = 0;
+  aux = strchr(str,'e');
+  for (i = 0; i< strlen(str);i++) {
+    if(isalpha(str[i])){
+      if (str[i] == 'e'){
+	num_e++;
+	if (num_e > 1) {
+	  /*Not a valid scientific notation*/
+	  return -1;
+	}
+      } else {
+	return -1;
+      }
+    }
   }
-  /*Checks if preal is a positive real number before returning.*/
-  return preal >= 0 ? preal : -1;
+  real = strtok(str,"e");
+  exp = strtok(NULL,"e");
+  if(exp != NULL) {
+    exp_n = atoi(exp);
+    if (exp_n == 0 && exp[0] != '0') {
+      /*Not an integer*/
+      return -1;
+    }
+    real_n = atof(real);
+    if (real_n == 0 && real[0] != '0') {
+      /*Not a real number*/
+      return -1;
+    }
+    if (real_n >= 0) {
+      preal = atof(real) * pow(10,atoi(exp));
+    } else {
+      /*Not a positive real number*/
+      return -1;
+    }
+  } else {
+    real_n = atof(real);
+    if (real_n == 0 && real[0] != '0') {
+      /*Not a real number*/
+      return -1;
+    }
+    if (real_n >= 0) {
+      preal = atof(real);
+    } else {
+      /*Not a positive real number*/
+      return -1;
+    }
+  }
+  return preal;
 }
 
 /*
