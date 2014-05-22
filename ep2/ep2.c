@@ -1,3 +1,6 @@
+/*
+ * INCLUDES
+ */
 #include <pthread.h>
 #include <semaphore.h>
 #include <unistd.h>
@@ -10,15 +13,13 @@
 #include <time.h>
 #include "gmp.h"
 
-#define PREC_B 40000L
-#define PREC_D 10000L
 /*
  * VARIABLES AND CONSTANTS
  */
 
-/*Constants used in the semaphores*/
-#define SHARED 1
-#define LOCAL 0
+/*Precision constants*/
+#define PREC_B 40000L
+#define PREC_D 10000L
 /*Keeps the number of threads to be used in e's calculation*/
 int num_threads;
 /*Variables used in the determiantion of the stop condition of e's calculation*/
@@ -26,6 +27,7 @@ int stop = 0;
 int stop_all = 0;
 char stop_setup;
 mpf_t stop_value;
+mpf_t stop_term;
 /*Variables used in the computation of e*/
 mpf_t e;
 mpf_t *factorials;
@@ -43,11 +45,14 @@ long iter = 0;
 long k = 1;
 /*Variables used to setup the output of the program*/
 char output_setup = '\0'; /*The default outup of the program is indicated by the char \0*/
+/*Variable used to set precision of e*/
 long int output_precision = 0L;
+
 /*
  * UTILITIES
  */
 
+/*Function that prints the value of e given a precision*/
 void print_e(char *str) {
   gmp_printf ("%s\n%.*Ff\n",str,output_precision, e);
 }
@@ -59,7 +64,6 @@ void print_e(char *str) {
 /* Computation of the constant e for multithreads  */
 void* compute_e_multi_t (void* argument) {
   int tid;
-  /*int evalue, fvalue;*/
   mpf_t diff;
   mpf_t past_e;
   struct timespec tim, tim2;
@@ -71,47 +75,38 @@ void* compute_e_multi_t (void* argument) {
   mpf_set_prec(past_e,PREC_B);
   tim.tv_sec = 0;
   while (!stop_all) {
-    /*sem_getvalue(&full,&fvalue);
-    printf("fvalue:%d\n",fvalue);
-    sem_getvalue(&empty,&evalue);
-    printf("evalue:%d\n",evalue);
-    printf("1ESC tid:%d\n",tid);*/
     sem_wait(&full);
-    /*sem_getvalue(&full,&fvalue);
-    printf("fvalue:%d\n",fvalue);
-    sem_getvalue(&empty,&evalue);
-    printf("evalue:%d\n",evalue);
-    printf("2ESC tid:%d\n",tid);*/
     sem_wait(&mutexF);
-    /*sem_getvalue(&full,&fvalue);
-    printf("fvalue:%d\n",fvalue);
-    sem_getvalue(&empty,&evalue);
-    printf("evalue:%d\n",evalue);
-    printf("3ESC tid:%d\n",tid);*/
-    if(stop != 1)
-      mpf_add(e, e, factorials[front]);
+    /*e's actualization and stop condition when option 'f' is activated*/
     if (stop_setup == 'f') {
-      mpf_sub(diff,e,past_e);
-      if (mpf_cmp(diff,stop_value) < 0){
-        mpf_set(e, past_e);
-	stop = 1;
-      } else {
-        mpf_set(past_e, e);
+      if (!stop) {
+	mpf_add(e, e, factorials[front]);
+	mpf_sub(diff,e,past_e);
+	if (mpf_cmp(diff,stop_value) < 0){
+	  mpf_set(e, past_e);
+	  stop = 1;
+	} else {
+	  mpf_set(past_e, e);
+	}
       }
     } else {
-      if (mpf_cmp(factorials[front],stop_value) < 0) {
+      /*e's actualization and stop condition when option 'm' is activated*/
+      if (stop) {
+	if (mpf_cmp(factorials[front],stop_term) > 0){
+	  mpf_add(e, e, factorials[front]);
+	}
+      } else if (mpf_cmp(factorials[front],stop_value) < 0) {
 	stop = 1;
+	mpf_init(stop_term);
+	mpf_set(stop_term, factorials[front]);
+	mpf_set_prec(stop_term,PREC_B);
+      } else {
+	mpf_add(e, e, factorials[front]);
       }
     }
     front= (front+1)%(num_threads-1);
-    /*printf("front:%d\n",front);
-    printf("SSC tid:%d\n",tid);*/
     sem_post(&mutexF);
     sem_post(&empty);
-    /*sem_getvalue(&full,&fvalue);
-    printf("fvalue:%d\n",fvalue);
-    sem_getvalue(&empty,&evalue);
-    printf("evalue:%d\n",evalue);*/
     sem_wait(&mutex);
     arrive[tid] = 1;
     arrive_order[order++] = tid;
@@ -127,6 +122,7 @@ void* compute_e_multi_t (void* argument) {
   mpf_clear(past_e);
   return NULL;
 }
+
 /* Function executed by the thread observer */
 void* observer() {
   int i;
@@ -195,14 +191,12 @@ void* compute_e_single_t (void* argument) {
   mpf_t past_e;
   mpf_t diff;
   mpf_t uk;
-  
   tid = *((int *)argument);
   mpf_init(uk);
   mpf_set_d(uk,1);
   mpf_init(past_e);
   mpf_init(diff);
   mpf_set(past_e, e);
-
   mpf_set_prec(uk, PREC_B);
   mpf_set_prec(past_e, PREC_B);
   mpf_set_prec(diff, PREC_B);
@@ -253,7 +247,7 @@ int main(int argc, char** argv) {
   mpf_init(e);  /* Inicialization of e*/
   mpf_init(stop_value); /* Inicialization of stop_value*/
   mpf_set_d(e,1); /* Setting e with with one*/
-  mpf_set_prec(e,PREC_B);
+  mpf_set_prec(e,PREC_B); /*Setting e's precision*/
 
   /* timing */
   clock_gettime(CLOCK_MONOTONIC, &tstart);
@@ -317,13 +311,13 @@ int main(int argc, char** argv) {
       mpf_init(factorials[i]);
       mpf_set_prec(factorials[i],PREC_B);
     }
-    rc = sem_init(&empty,LOCAL,num_threads-1);
+    rc = sem_init(&empty,0,num_threads-1);
     assert(rc == 0);
-    rc = sem_init(&full,LOCAL,0);
+    rc = sem_init(&full,0,0);
     assert(rc == 0);
-    rc = sem_init(&mutexF,LOCAL,1);
+    rc = sem_init(&mutexF,0,1);
     assert(rc == 0);
-    rc = sem_init(&mutex,LOCAL,1);
+    rc = sem_init(&mutex,0,1);
     assert(rc == 0);
     for(i=0;i<(num_threads-1);i++) {
       threads_args[i]=i;
@@ -383,5 +377,6 @@ int main(int argc, char** argv) {
   free(threads_args);
   mpf_clear(e);
   mpf_clear(stop_value);
+  mpf_clear(stop_term);
   return 0;
 }
