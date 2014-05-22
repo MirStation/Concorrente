@@ -40,19 +40,31 @@
 \section{Introdução}
   Para calcular o número de Euler, utilizamos a fórmula sugerida: \linebreak 
   \centerline{ $e =\sum\limits_{n=0}^\infty \frac{1}{n!}$ } 
-  No nosso programa, utilizamos uma thread produtora para calcular os termos da somatória e outras $m-1$ threads consumidoras, sendo $m$ o primeiro argumento da linha de comando. 
+\indent No nosso programa, utilizamos uma thread produtora para calcular os termos da somatória e outras $m-1$ threads consumidoras, sendo $m$ o primeiro argumento da linha de comando. 
   
 \section{Ambiente}
-  Configuração da Máquina.
+  Para rodar os testes que geraram os resultados apresentados neste relatório, usamos o seguinte sistema :
+\begin{itemize}
+\item SO: Ubuntu Linux 12.04 (32-bit)
+\item RAM: 6GB
+\item Processador: i5 2.50 GHz x 4 cores
+\item Compilador C: gcc 4.6.3 - sem otimizações
+\end{itemize}
 
 \section{Método}
-  Valores de entrada (f e m).
-  Como o tempo foi medido?	
-  Quantas repetições para cada um?
+  Demos um valor de entrada 1e-500 ou $10^{-500}$ para o programa, paras as opções f e m. Para medir o tempo de execução,
+fizemos a medição dentro do código utilizando a função \textit{clock\_gettime()} da \textit{librt (Realtime Extensions library)}.
+Pegamos o valor inicial do relógio no começo da função main, e o valor final logo antes do ponto de retorno da função.
+Para cada número de threads, de 1 a 10, foram feitas 1000 repetições. Os resultados se encontram na próxima seção.
 
+\pagebreak
 \section{Análise dos Resultados}
-  Gráficos:
-    - Para cada quantidade de threads, média aritmética e desvio padrão.
-  Análise: foi o esperado?
+  A seguir, vemos os gráficos para as opções m e f, respectivamente:
+  \centerline{\includegraphics[width=\linewidth]{Dados/m_plot.png}}
+  \centerline{\includegraphics[width=\linewidth]{Dados/f_plot.png}}
+  
+  \pagebreak
+  \indent  Na nossa implementação com threads produtoras e consumidoras, o caso com apenas uma thread deve ser tratado separadamente.
+  Assim, a opção s do quarto argumento do programa é equivalente a passar o número 1 como primeiro argumento.
 \end{document}
 

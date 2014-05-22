@@ -7,7 +7,7 @@ do
 	str=""
 	for j in `seq 1 $2`
 	do
-		str="$str`../../ep2 $i f 1e-500 t`,"
+		str="$str`../../ep2 $i m 1e-500 t`,"
 	done
 	str="$str;"
 	echo $str >> $path

@@ -2,7 +2,7 @@
 
 use List::Util qw(sum);
 
-open(DATA,"<output/output.csv") or die $!;
+open(DATA,"<output/output_500.csv") or die $!;
 open(OUTD,">output/data.csv") or die $!;
 	
 my $i = 0;

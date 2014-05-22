@@ -13,7 +13,7 @@ rep = 10
 def plotagem(x,y,xerr,yerr):
 	plt.figure()
 	plt.errorbar(x, y, yerr=yerr, fmt='o')
-	plt.title(u"f 10e-500 com 1000 repetições")	
+	plt.title(u"m 10e-500 com 1000 repetições")	
 	plt.xlim([0,12])
 	plt.ylim([-1,round(max(y)+max(yerr))+2])
 	plt.plot([0, 11], [y[0], y[0]], color='red', linestyle='-', linewidth=1)
