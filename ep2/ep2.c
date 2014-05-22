@@ -270,7 +270,12 @@ int main(int argc, char** argv) {
       exit(1);
     }
     /*Processing the 3th argument*/
-    output_precision = strlen(argv[3])-2;
+    if(strchr(argv[3],'e') == NULL)
+      output_precision = strlen(argv[3])-2;
+    else if(strchr(argv[3],'-') != NULL)
+      output_precision = -1*atoi(strchr(argv[3],'-'));
+    else 
+      output_precision = atoi(strchr(argv[3],'-'));
     mpf_set_prec(stop_value,PREC_B);
     mpf_set_str(stop_value, argv[3], 10);
     /*Processing the 4th argument (optinal)*/
