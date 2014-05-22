@@ -48,7 +48,7 @@
 \item SO: Ubuntu Linux 12.04 (32-bit)
 \item RAM: 6GB
 \item Processador: i5 2.50 GHz x 4 cores
-\item Compilador C: gcc 4.6.3 - sem otimizações
+\item Compilador C: gcc 4.6.3
 \end{itemize}
 
 \section{Método}

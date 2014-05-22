@@ -1,0 +1,30 @@
+Alunos:
+
+António Martins Miranda - 7644342
+Igor Canko Minotto 	- 7160986
+
+--------------------------------------------------------------------------------
+
+Como executar
+
+	- Para compilar o programa, basta fazer:
+		
+
+		$ make
+
+
+	- Para executar o programa:
+
+
+		$ ./ep2 [options]
+
+Exemplos:
+
+	$ ./ep2 5 m 0.435736
+	$ ./ep2 0 f 0.2e-12
+	$ ./ep2 1 f 1e-200 s 
+	$ ./ep2 1 f 1e-200 d 
+	$ ./ep2 1 f 1e-200 t
+
+Obs.: A opção t do quarto argumento imprime o tempo de execução do programa, somente. 
+
