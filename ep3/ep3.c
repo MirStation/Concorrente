@@ -10,16 +10,24 @@
 
 char weight_option = '\0';
 int *weights;
+int end_of_eating = 0;
 Food c;
 
 void *eater(void *args) {
 	Food f;
 	int tid = *((int*)args);
-	get_food_from_pot(&f,weights[tid]);
+	int i;
+	if(weight_option == 'U') 
+		get_food_from_pot(&f);
+	else
+		for (i = 0; i < weights[tid]; i++)
+			get_food_from_pot(&f);
 	return NULL;
 }
 void *chef(void *args) {
-	put_food_in_pot(c);
+	while (!end_of_eating) {
+		put_food_in_pot(c);
+	}
 	return NULL;
 }
 
@@ -30,7 +38,7 @@ int main (int argc, char *argv[]) {
 	int repetitions = 0;
 
 	int n, m;
-	int i, retval;
+	int i, j, retval;
 
 	pthread_t *threads;
 	int *thread_args;	
@@ -66,23 +74,32 @@ int main (int argc, char *argv[]) {
 	assert(threads);
 	thread_args = malloc(sizeof(*threads) * (n+m));
 	assert(thread_args);
-	monitor_init(c);
-	for(i = 0; i < n; ++i) {
-		thread_args[i] = i;
-		retval = pthread_create(&threads[i],NULL,eater,(void *)&thread_args[i]);
-		assert(retval == 0);
+
+	for(j = 0; j < repetitions; j++) {
+		monitor_init(c);
+		end_of_eating = 0;
+		for(i = 0; i < n; ++i) {
+			thread_args[i] = i;
+			retval = pthread_create(&threads[i],NULL,eater,(void *)&thread_args[i]);
+			assert(retval == 0);
+		}
+		for(; i < n+m; ++i) {
+			thread_args[i] = i;
+			retval = pthread_create(&threads[i],NULL,chef,(void *)&thread_args[i]);
+			assert(retval == 0);
+		}
+		for(i = 0; i < n; ++i) {
+			retval = pthread_join(threads[i],NULL);
+			assert(retval == 0);
+		}
+		end_of_eating = 1;
+		set_end(end_of_eating);
+		for(; i < n+m; ++i) {
+			retval = pthread_join(threads[i],NULL);
+			assert(retval == 0);
+		}
+		monitor_finish();
 	}
-	for(; i < n+m; ++i) {
-		thread_args[i] = i;
-		retval = pthread_create(&threads[i],NULL,chef,(void *)&thread_args[i]);
-		assert(retval == 0);
-	}
-	for(i = 0; i < n+m; ++i) {
-		retval = pthread_join(threads[i],NULL);
-		
-		assert(retval == 0);
-	}
-	monitor_finish();
 	fclose(file);
 	free(weights);
 	free(threads);
