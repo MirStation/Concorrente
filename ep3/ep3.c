@@ -18,15 +18,16 @@ void *eater(void *args) {
 	int tid = *((int*)args);
 	int i;
 	if(weight_option == 'U') 
-		get_food_from_pot(&f);
+		get_food_from_pot(&f,tid);
 	else
 		for (i = 0; i < weights[tid]; i++)
-			get_food_from_pot(&f);
+			get_food_from_pot(&f,tid);
 	return NULL;
 }
 void *chef(void *args) {
+	int tid = *((int*)args);
 	while (!end_of_eating) {
-		put_food_in_pot(c);
+		put_food_in_pot(c,tid);
 	}
 	return NULL;
 }
@@ -84,7 +85,7 @@ int main (int argc, char *argv[]) {
 			assert(retval == 0);
 		}
 		for(; i < n+m; ++i) {
-			thread_args[i] = i;
+			thread_args[i] = i-n;
 			retval = pthread_create(&threads[i],NULL,chef,(void *)&thread_args[i]);
 			assert(retval == 0);
 		}

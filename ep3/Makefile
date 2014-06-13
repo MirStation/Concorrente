@@ -3,7 +3,7 @@ CC = gcc
 FLAGS = -g -Wall -ansi -pedantic -O3
 LIBS = -lpthread -D_POSIX_C_SOURCE=199309L -lgmp -lrt -lm
 TARGET = ep3
-OBJECTS = ep3.o monitor.o
+OBJECTS = ep3.o monitor.o pqueue.o
 BACKUPDAY = `date +%y%m%d_%a_%H%M%S`
 
 all : ${TARGET}
@@ -11,6 +11,12 @@ all : ${TARGET}
 ${TARGET} : ${OBJECTS}
 	${CC} -o $@ $? ${FLAGS} ${LIBS}
 
+pqueue.o: pqueue.c
+	${CC} pqueue.c -c
+	
+monitor.o: monitor.c pqueue.o
+	${CC} monitor.c pqueue.o -c
+ 	
 %.o : %.c
 	${CC} -c -o $@ $? ${FLAGS} ${LIBS} -I.
 

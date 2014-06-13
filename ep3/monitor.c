@@ -33,10 +33,11 @@ void set_end(int end2) {
 	pthread_mutex_lock(&mutex);
 	end = end2;
 	signal_all(&potempty);
+	clean_pqueue();
 	printf("fim!\n");
 	pthread_mutex_unlock(&mutex);
 }
-void get_food_from_pot(Food *f) {
+void get_food_from_pot(Food *f, int tid) {
 	/*ignorando o peso por enquanto*/
 	pthread_mutex_lock(&mutex);
 	while (pot_food == 0) { 
@@ -47,7 +48,7 @@ void get_food_from_pot(Food *f) {
 	pot_food -= *f;
 	pthread_mutex_unlock(&mutex);
 }
-void put_food_in_pot(Food f) {
+void put_food_in_pot(Food f, int tid) {
 	pthread_mutex_lock(&mutex);
 	if(end)	{
 		pthread_mutex_unlock(&mutex);
@@ -61,6 +62,7 @@ void put_food_in_pot(Food f) {
 		}
 	}
 	pot_food = f;
+	printf("Cozinheiro que encheu o pote: %d\n",tid);
 	signal_all(&potfull);
 	pthread_mutex_unlock(&mutex);
 }
