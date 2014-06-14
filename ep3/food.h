@@ -1,4 +1,4 @@
-#ifndef FOOD_TYPE
-#define FOOD_TYPE
+#ifndef FOOD_H
+#define FOOD_H
 typedef unsigned int Food;
 #endif

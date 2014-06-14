@@ -2,9 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include "food.h"
-#include "monitor.h"
 
+#include "monitor.h"
 
 #define MAXLINE 80
 
@@ -107,4 +106,3 @@ int main (int argc, char *argv[]) {
 	free(thread_args);
 	return 0;
 }
-

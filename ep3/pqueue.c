@@ -1,10 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "pqueue.h"
 
 typedef struct elem_s {
-	int tid;
-	int priority;
-	struct elem_s *next;
+  int tid;
+  int priority;
+  struct elem_s *next;
 } elem;
 typedef elem* element;
 
@@ -54,16 +53,14 @@ int pull_highest_priority_element() {
 	return tid;
 }
 
-void clean_queue_R(element e);
-
-void clean_queue() {
-	clean_queue_R(pqueue);
-}
-
 void clean_queue_R(element e) {
 	if(e == NULL)
 		return;
 	clean_queue_R(e->next);
 	e->next = NULL;
 	free(e);
+}
+
+void clean_queue() {
+	clean_queue_R(pqueue);
 }

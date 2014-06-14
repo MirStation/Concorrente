@@ -1,10 +1,10 @@
 #include "monitor.h"
 
-Food c;				/* copacidade do pote 	 */
-Food pot_food;			/* pote de comida 	 */
-pthread_mutex_t mutex;		
-pthread_cond_t potfull; 	/* sinaliza se pot_food == C */
-pthread_cond_t potempty;	/* sinaliza se pot_food == 0 */
+Food c;                         /* copacidade do pote    */
+Food pot_food;                  /* pote de comida        */
+pthread_mutex_t mutex;
+pthread_cond_t potfull;         /* sinaliza se pot_food == C */
+pthread_cond_t potempty;        /* sinaliza se pot_food == 0 */
 int end;
 
 void monitor_init(Food capacity) {
@@ -33,7 +33,8 @@ void set_end(int end2) {
 	pthread_mutex_lock(&mutex);
 	end = end2;
 	signal_all(&potempty);
-	clean_pqueue();
+	clean_queue();
+	insert_with_priority(1, 1);
 	printf("fim!\n");
 	pthread_mutex_unlock(&mutex);
 }
@@ -66,6 +67,3 @@ void put_food_in_pot(Food f, int tid) {
 	signal_all(&potfull);
 	pthread_mutex_unlock(&mutex);
 }
-
-
-

@@ -1,9 +1,9 @@
 # Makefile
 CC = gcc
 FLAGS = -g -Wall -ansi -pedantic -O3
-LIBS = -lpthread -D_POSIX_C_SOURCE=199309L -lgmp -lrt -lm
+LIBS = -lpthread -D_POSIX_C_SOURCE=199309L
 TARGET = ep3
-OBJECTS = ep3.o monitor.o pqueue.o
+OBJECTS = ep3.o pqueue.o monitor.o 
 BACKUPDAY = `date +%y%m%d_%a_%H%M%S`
 
 all : ${TARGET}
@@ -11,12 +11,6 @@ all : ${TARGET}
 ${TARGET} : ${OBJECTS}
 	${CC} -o $@ $? ${FLAGS} ${LIBS}
 
-pqueue.o: pqueue.c
-	${CC} pqueue.c -c
-	
-monitor.o: monitor.c pqueue.o
-	${CC} monitor.c pqueue.o -c
- 	
 %.o : %.c
 	${CC} -c -o $@ $? ${FLAGS} ${LIBS} -I.
 
@@ -28,4 +22,3 @@ tar:
 
 backup:
 	tar cvfz ${TARGET}-Igor-Antonio-Backup-${BACKUPDAY}.tgz Makefile *.c *.h *.txt
-
