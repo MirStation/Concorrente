@@ -33,6 +33,7 @@ void monitor_finish() {
 	pthread_cond_destroy(&potfull);
 	pthread_cond_destroy(&potempty);
 	clean_queue();
+	free(s_potempty);
 }
 void wait(pthread_cond_t *cond) {
 	pthread_cond_wait(cond,&mutex);
@@ -71,10 +72,9 @@ void get_food_from_pot(Food *f, int tid, int weight, int* e) {
     }
     pull_highest_priority_element();
   }
-  
   while (pot_food == 0) {
     if(repetitions > 0){
-      if(s_potempty[repetitions-1] == -1) s_potempty[repetitions-1]=tid;
+      if(s_potempty[repetitions-1] == -1) {s_potempty[repetitions-1]=tid;/*printf("s-rep: %d\n",repetitions-1);*/}
     }
     signal_all(&potempty);
     wait(&potfull);
@@ -117,7 +117,9 @@ void put_food_in_pot(Food f, int tid,int* c) {
     for(i=0;i<aux_r;i++){
       printf(" %d",s_potempty[i]);
       }
-      putchar('\n');*/
+    putchar('\n');
+    printf("rep: %d\n",repetitions);
+    if(s_potempty[repetitions]==-1) {puts("erro no indice");exit(1);}*/
     printf("Selvagem que notou que o pote está vazio: %d\n",s_potempty[repetitions]);
     printf("Cozinheiro que encheu o pote: %d\n",tid);
     print();

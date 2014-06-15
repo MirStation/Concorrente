@@ -28,7 +28,6 @@ void *savage(void *args) {
     if(weight_option == 'U'){
       get_food_from_pot(&f,tid,1,&(((int**)args)[0][1]));
     }else{
-      puts("O.O");
       get_food_from_pot(&f,tid,weights[tid],&(((int**)args)[0][1]));
     }
     /*Just a delay*/
@@ -40,13 +39,8 @@ void *savage(void *args) {
 
 void *chef(void *args) {
   int tid = (((int**)args)[0][0]);
-  struct timespec tim, tim2;
-  tim.tv_sec = 0;
   while (get_repetitions() >= 0) {
     put_food_in_pot(c,tid,&(((int**)args)[0][1]));
-    /*Just a delay*/
-    tim.tv_nsec = rand()%1000;
-    nanosleep(&tim,&tim2);
   }
   return NULL;
 }
