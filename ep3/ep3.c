@@ -53,6 +53,9 @@ void print() {
   for(i=n;i<n+m;i++){
     printf("O cozinheiro %d já encheu o pote %d vezes.\n",thread_args[i][0],thread_args[i][1]);
   }
+  for(i=0;i<80;i++)
+	printf("-");
+  printf("\n");
 }
 
 
@@ -102,7 +105,10 @@ int main (int argc, char *argv[]) {
 	  assert(thread_args[i]);
 	}
 	
-	monitor_init(c,repetitions);
+	monitor_init(c,repetitions,m);
+	for(i=0;i<80;i++)
+	printf("-");
+  printf("\n");
 	for(i = 0; i < n; ++i) {
 	  thread_args[i][0]= i;
 	  thread_args[i][1]= 0;
@@ -110,7 +116,7 @@ int main (int argc, char *argv[]) {
 	  assert(retval == 0);
 	}
 	for(; i < n+m; ++i) {
-	  thread_args[i][0]= i;
+	  thread_args[i][0]= i-n;
 	  thread_args[i][1]= 0;
 	  retval = pthread_create(&threads[i],NULL,chef,(void *)&thread_args[i]);
 	  assert(retval == 0);
