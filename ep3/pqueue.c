@@ -25,18 +25,27 @@ void insert_with_priority(int tid, int priority) {
 		pqueue = create_element(tid,priority,NULL);
 		return;
 	}	
+	
 	/** Primeiro da lista **/
 	if(pqueue->priority < priority) {
 		pqueue = create_element(tid,priority,pqueue);
 		return;
+	} else if (pqueue->priority == priority && pqueue->tid == tid){
+	  /*As tid presentes na  pqueue são únicas, ou seja, não insere tids repetidos*/
+	  return;
 	}
+
 	/** No meio da lista **/
 	for(e = pqueue; e->next != NULL; e = e->next) {
-		if(e->next->priority < priority) {
-			e->next = create_element(tid,priority,e->next);
-			return;				
-		}
+	  if(e->next->priority < priority) {
+	    e->next = create_element(tid,priority,e->next);
+	    return;				
+	  } else if (e->next->priority == priority && e->next->tid == tid){
+	    /*As tid presentes na  pqueue são únicas, ou seja, não insere tids repetidos*/
+	    return;
+	  }
 	}
+	
 	/** Último da lista **/
 	e->next = create_element(tid,priority,NULL);
 }
@@ -44,7 +53,7 @@ void insert_with_priority(int tid, int priority) {
 int highest_priority_element() {
   element first = pqueue;
   if(first == NULL){
-    return -1;
+    return 0;
   }
   return first->tid;
 }

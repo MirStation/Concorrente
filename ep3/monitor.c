@@ -7,18 +7,26 @@ pthread_cond_t potfull;         /* sinaliza se pot_food == C */
 pthread_cond_t potempty;        /* sinaliza se pot_food == 0 */
 
 int end;
-char weight_option;
 int repetitions;
+/*int aux_r;*/
 
-void monitor_init(Food capacity, char w_option, int r) {
-	c = capacity;
-	pot_food = 0;
-	end = 0;
-	repetitions = r;
-	weight_option = w_option;
-	pthread_mutex_init(&mutex,NULL);
-	pthread_cond_init(&potfull,NULL);
-	pthread_cond_init(&potempty,NULL);
+int* s_potempty;
+
+void monitor_init(Food capacity, int r) {
+  int i;
+  c = capacity;
+  pot_food = c;
+  end = 0;
+  repetitions = r;
+  /*aux_r = r;*/
+  s_potempty = (int*) malloc(sizeof(int)*r);
+  assert(s_potempty);
+  for(i=0;i<r;i++){
+    s_potempty[i]=-1;
+  }
+  pthread_mutex_init(&mutex,NULL);
+  pthread_cond_init(&potfull,NULL);
+  pthread_cond_init(&potempty,NULL);
 }
 void monitor_finish() {
 	pthread_mutex_destroy(&mutex);
@@ -49,13 +57,25 @@ void signal_all(pthread_cond_t *cond) {
 int get_repetitions() {
   return repetitions;
 }
-void get_food_from_pot(Food *f, int tid, int weight) {
+void get_food_from_pot(Food *f, int tid, int weight, int* e) {
   pthread_mutex_lock(&mutex);
   if (end && pot_food == 0){
     pthread_mutex_unlock(&mutex);
     return;
   }
+  if (highest_priority_element() > 0){
+    insert_with_priority(tid, weight);
+    if(highest_priority_element() != tid){
+      pthread_mutex_unlock(&mutex);
+      return;
+    }
+    pull_highest_priority_element();
+  }
+  
   while (pot_food == 0) {
+    if(repetitions > 0){
+      if(s_potempty[repetitions-1] == -1) s_potempty[repetitions-1]=tid;
+    }
     signal_all(&potempty);
     wait(&potfull);
     if (end && pot_food == 0){
@@ -63,13 +83,13 @@ void get_food_from_pot(Food *f, int tid, int weight) {
       return;
     }
   }
-  printf("Selvagem %d servido...\n",tid);
   *f = 1;
   pot_food -= *f;
-  printf("Selvagem %d comendo ...\n",tid);
+  e[0] += 1;
   pthread_mutex_unlock(&mutex);
 }
-void put_food_in_pot(Food f, int tid) {
+void put_food_in_pot(Food f, int tid,int* c) {
+  /*int i;*/
   pthread_mutex_lock(&mutex);
   if (end) {
     pthread_mutex_unlock(&mutex);
@@ -92,7 +112,15 @@ void put_food_in_pot(Food f, int tid) {
   } else {
     pot_food = f;
     signal_all(&potfull);
+    c[0] += 1;
+    /*printf("s_potempty:");
+    for(i=0;i<aux_r;i++){
+      printf(" %d",s_potempty[i]);
+      }
+      putchar('\n');*/
+    printf("Selvagem que notou que o pote está vazio: %d\n",s_potempty[repetitions]);
     printf("Cozinheiro que encheu o pote: %d\n",tid);
+    print();
   }
   pthread_mutex_unlock(&mutex);
 }
