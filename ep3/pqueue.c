@@ -41,16 +41,21 @@ void insert_with_priority(int tid, int priority) {
 	e->next = create_element(tid,priority,NULL);
 }
 
-int pull_highest_priority_element() {
-	element first = pqueue;
-	int tid;
-	if(first == NULL)
-		return -1;
-	tid = first->tid;
-	pqueue = first->next;
-	first->next = NULL;
-	free(first);
-	return tid;
+int highest_priority_element() {
+  element first = pqueue;
+  if(first == NULL){
+    return -1;
+  }
+  return first->tid;
+}
+
+void pull_highest_priority_element() {
+  element first = pqueue;
+  if(first == NULL)
+    return ;
+  pqueue = first->next;
+  first->next = NULL;
+  free(first);
 }
 
 void clean_queue_R(element e) {

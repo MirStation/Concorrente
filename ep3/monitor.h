@@ -7,11 +7,12 @@
 #include "pqueue.h"
 #include "food.h"
 
-void monitor_init(Food capacity);
+void monitor_init(Food capacity,char w_option, int r);
 void monitor_finish();
-void get_food_from_pot(Food *f, int tid);
+void get_food_from_pot(Food *f, int tid, int weight);
+int get_repetitions();
 void put_food_in_pot(Food f, int tid);
-void set_end(int end2);
-void wait(pthread_cond_t *cond);
+
+/*void set_end(int end2);*/
 
 #endif

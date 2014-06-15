@@ -2,46 +2,54 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <time.h>
 
 #include "monitor.h"
 
 #define MAXLINE 80
 
-char weight_option = '\0';
 int *weights;
-int end_of_eating = 0;
 Food c;
 
-void *eater(void *args) {
-	Food f;
-	int tid = *((int*)args);
-	int i;
-	if(weight_option == 'U') 
-		get_food_from_pot(&f,tid);
-	else
-		for (i = 0; i < weights[tid]; i++)
-			get_food_from_pot(&f,tid);
-	return NULL;
+void *savage(void *args) {
+  Food f;
+  int tid = *((int*)args);
+  struct timespec tim, tim2;
+  tim.tv_sec = 0;
+  while (get_repetitions() >= 0) {
+    get_food_from_pot(&f,tid,0);
+    /*Just a delay*/
+    tim.tv_nsec = rand()%1000;
+    nanosleep(&tim,&tim2);
+  } 
+  return NULL;
 }
+
 void *chef(void *args) {
-	int tid = *((int*)args);
-	while (!end_of_eating) {
-		put_food_in_pot(c,tid);
-	}
-	return NULL;
+  int tid = *((int*)args);
+  struct timespec tim, tim2;
+  tim.tv_sec = 0;
+  while (get_repetitions() >= 0) {
+    put_food_in_pot(c,tid);
+    /*Just a delay*/
+    tim.tv_nsec = rand()%1000;
+    nanosleep(&tim,&tim2);
+  }
+  return NULL;
 }
 
 int main (int argc, char *argv[]) {
 	FILE *file;
 	char *filepath;
 	char line[MAXLINE];
-	int repetitions = 0;
 
 	int n, m;
-	int i, j, retval;
+	int i, retval, repetitions;
 
 	pthread_t *threads;
-	int *thread_args;	
+	int *thread_args;
+
+	char weight_option;
 
 	assert(argc == 4);
 
@@ -72,34 +80,32 @@ int main (int argc, char *argv[]) {
 
 	threads = malloc(sizeof(*threads) * (n+m));
 	assert(threads);
-	thread_args = malloc(sizeof(*threads) * (n+m));
-	assert(thread_args);
 
-	for(j = 0; j < repetitions; j++) {
-		monitor_init(c);
-		end_of_eating = 0;
-		for(i = 0; i < n; ++i) {
-			thread_args[i] = i;
-			retval = pthread_create(&threads[i],NULL,eater,(void *)&thread_args[i]);
-			assert(retval == 0);
-		}
-		for(; i < n+m; ++i) {
-			thread_args[i] = i-n;
-			retval = pthread_create(&threads[i],NULL,chef,(void *)&thread_args[i]);
-			assert(retval == 0);
-		}
-		for(i = 0; i < n; ++i) {
-			retval = pthread_join(threads[i],NULL);
-			assert(retval == 0);
-		}
-		end_of_eating = 1;
-		set_end(end_of_eating);
-		for(; i < n+m; ++i) {
-			retval = pthread_join(threads[i],NULL);
-			assert(retval == 0);
-		}
-		monitor_finish();
+	thread_args = (int*)malloc(sizeof(int)*(n+m));
+	assert(thread_args);
+	
+	monitor_init(c,weight_option,repetitions);
+	for(i = 0; i < n; ++i) {
+	  thread_args[i]= i;
+	  retval = pthread_create(&threads[i],NULL,savage,(void *)&thread_args[i]);
+	  assert(retval == 0);
 	}
+	for(; i < n+m; ++i) {
+	  thread_args[i] = i;
+	  retval = pthread_create(&threads[i],NULL,chef,(void *)&thread_args[i]);
+	  assert(retval == 0);
+	}
+	/*Waiting for the end of all the chefs*/
+	for(i = n; i < n+m; ++i) {
+	  retval = pthread_join(threads[i],NULL);
+	  assert(retval == 0);
+	}
+	/*Waiting for the end of all the savages*/
+	for(i = 0; i < n; ++i) {
+	  retval = pthread_join(threads[i],NULL);
+	  assert(retval == 0);
+	}
+	monitor_finish();
 	fclose(file);
 	free(weights);
 	free(threads);
