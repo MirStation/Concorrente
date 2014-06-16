@@ -17,6 +17,4 @@ void get_food_from_pot(Food *f, int tid, int weight, int* e);
 int get_repetitions();
 void put_food_in_pot(Food f, int tid, int * c);
 
-/*void set_end(int end2);*/
-
 #endif

@@ -15,15 +15,14 @@ Food c;
 int n, m;
 int **thread_args;
 
-/* void insert_with_priority(int tid, int priority); */
-/* int highest_priority_element(); */
-/* void pull_highest_priority_element(); */
-
 void *savage(void *args) {
   Food f;
   int tid = (((int**)args)[0][0]);
   struct timespec tim, tim2;
   tim.tv_sec = 0;
+  /*Just a delay*/
+  tim.tv_nsec = rand()%1000;
+  nanosleep(&tim,&tim2);
   while (get_repetitions() >= 0) {
     if(weight_option == 'U'){
       get_food_from_pot(&f,tid,1,&(((int**)args)[0][1]));
@@ -48,16 +47,15 @@ void *chef(void *args) {
 void print() {
   int i;
   for(i=0;i<n;i++){
-    printf("O selvagem %d jÃ¡ comeu %d vezes.\n",thread_args[i][0],thread_args[i][1]);
+    printf("O selvagem %d já comeu %d vezes.\n",thread_args[i][0],thread_args[i][1]);
   }
   for(i=n;i<n+m;i++){
-    printf("O cozinheiro %d jÃ¡ encheu o pote %d vezes.\n",thread_args[i][0],thread_args[i][1]);
+    printf("O cozinheiro %d já encheu o pote %d vezes.\n",thread_args[i][0],thread_args[i][1]);
   }
   for(i=0;i<80;i++)
 	printf("-");
   printf("\n");
 }
-
 
 int main (int argc, char *argv[]) {
 	FILE *file;
@@ -135,6 +133,9 @@ int main (int argc, char *argv[]) {
 	fclose(file);
 	free(weights);
 	free(threads);
+	for(i=0;i<n+m;i++){
+	  free(thread_args[i]);
+	}
 	free(thread_args);
 	return 0;
 }

@@ -31,6 +31,7 @@ void monitor_init(Food capacity, int r, int n) {
   pthread_mutex_init(&mutex,NULL);
   pthread_cond_init(&potfull,NULL);
   potempty_cook = malloc(sizeof(*potempty_cook)*n_cooks);
+  assert(potempty_cook);
   for(i=0;i<n_cooks;i++)
 	pthread_cond_init(&potempty_cook[i],NULL);
 }
@@ -42,6 +43,7 @@ void monitor_finish() {
 		pthread_cond_destroy(&potempty_cook[i]);
 	clean_queue();
 	free(s_potempty);
+	free(potempty_cook);
 }
 void wait(pthread_cond_t *cond) {
 	pthread_cond_wait(cond,&mutex);
@@ -52,57 +54,61 @@ void signal(pthread_cond_t *cond) {
 void signal_all(pthread_cond_t *cond) {
 	pthread_cond_broadcast(cond);
 }
-/*void set_end(int value) {
-	pthread_mutex_lock(&mutex);
-	if(end == 0){
-	  end = value;
-	} else {
-	  send = value;
-	  signal_all(&potfull);
-	}
-      	printf("fim!\n");
-	pthread_mutex_unlock(&mutex);
-}*/
+
 int get_repetitions() {
   return repetitions;
 }
 void get_food_from_pot(Food *f, int tid, int weight, int* e) {
+  int pt;
   pthread_mutex_lock(&mutex);
+  /*puts("entrando pot");*/
   if (end && pot_food == 0){
     pthread_mutex_unlock(&mutex);
     return;
   }
-  if (highest_priority_element() > 0){
-    insert_with_priority(tid, weight);
-    if(highest_priority_element() != tid){
-      pthread_mutex_unlock(&mutex);
-      return;
-    }
-    pull_highest_priority_element();
-  }
-  while (pot_food == 0) {
+  pt = tid;
+  while (pot_food == 0 || pt != tid) {
 	if (first == 0) {
 		first = 1;
 		if(repetitions > 0){
-		  if(s_potempty[repetitions-1] == -1) {s_potempty[repetitions-1]=tid;/*printf("s-rep: %d\n",repetitions-1);*/}
+		  if(s_potempty[repetitions-1] == -1) {s_potempty[repetitions-1]=tid;}
 		}
 		signal(&potempty_cook[uniform_distribution(0,n_cooks-1)]);
 	}
+	/*puts("IBefore");
+	  print_pqueue();*/
+	insert_with_priority(tid, weight);
+	/*puts("IAfter");
+      print_pqueue();*/
     wait(&potfull);
     if (end && pot_food == 0){
       pthread_mutex_unlock(&mutex);
       return;
     }
+    /*printf("hp:%d\n",highest_priority_element());*/
+      pt = highest_priority_element();
+    if(pt == tid){
+      /*puts("PBefore");
+	print_pqueue();*/
+      pull_highest_priority_element();
+      /*puts("PAfter");
+	print_pqueue();*/
+    }
+    /*printf("e:%d r:%d pf:%d tid:%d pt:%d\n",end, repetitions,pot_food,tid,pt);*/
   }
   *f = 1;
   pot_food -= *f;
   e[0] += 1;
+  /*puts("saindo pot");*/
+  if(end==1 && repetitions<0){
+    signal_all(&potfull);
+  }
   pthread_mutex_unlock(&mutex);
 }
 void put_food_in_pot(Food f, int tid, int* c) {
   int i;
-  
   pthread_mutex_lock(&mutex);
+  /*puts("entando food");*/
   if (end) {
     pthread_mutex_unlock(&mutex);
     return;
@@ -135,12 +141,13 @@ void put_food_in_pot(Food f, int tid, int* c) {
       }
 
     putchar('\n');
-    printf("rep: %d\n",repetitions);*/
+    printf("rep: %d\n",repetitions);
     if(s_potempty[repetitions]==-1) {puts("erro no indice");exit(1);}
-
-    printf("Selvagem que notou que o pote estÃ¡ vazio: %d\n",s_potempty[repetitions]);
+    */
+    printf("Selvagem que notou que o pote está vazio: %d\n",s_potempty[repetitions]);
     printf("Cozinheiro que encheu o pote: %d\n",tid);
     print();
   }
+  /*puts("saindo food");*/
   pthread_mutex_unlock(&mutex);
 }

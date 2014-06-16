@@ -53,7 +53,7 @@ void insert_with_priority(int tid, int priority) {
 int highest_priority_element() {
   element first = pqueue;
   if(first == NULL){
-    return 0;
+    return -1;
   }
   return first->tid;
 }
@@ -65,6 +65,14 @@ void pull_highest_priority_element() {
   pqueue = first->next;
   first->next = NULL;
   free(first);
+}
+
+void print_pqueue(){
+  element e = pqueue;
+  puts("PQueue elements:");
+  for(e=pqueue; e != NULL; e=e->next){
+    printf("tid:%d p:%d\n",e->tid,e->priority);
+  }
 }
 
 void clean_queue_R(element e) {
