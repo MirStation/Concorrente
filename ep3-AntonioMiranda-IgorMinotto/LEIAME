@@ -1,0 +1,24 @@
+Alunos:
+
+António Martins Miranda - 7644342
+Igor Canko Minotto 	- 7160986
+
+--------------------------------------------------------------------------------
+
+Como executar
+
+	- Para compilar o programa, basta fazer:
+		
+
+		$ make
+
+
+	- Para executar o programa:
+
+
+		$ ./ep3 FILE R (U|P)
+
+Exemplos:
+
+	$ ./ep3 arquivo 100 U
+
