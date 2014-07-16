@@ -1,0 +1,5 @@
+TODO:
+	refatorar alguns métodos e variáveis
+	acrescentar alguns comentários no código	
+	impressão da posição dos jogadores por volta em cada 15 minutos (da simulação)
+	

@@ -1,0 +1,61 @@
+Classificacao geral por pilotos:
+  1º lugar com 369:   0 [  0]
+  2º lugar com 331:   1 [  0]
+  3º lugar com 328:   3 [  1]
+  4º lugar com 302:   2 [  1]
+Podio da volta 1:
+  0 terminou em   1º lugar
+  1 terminou em   2º lugar
+  3 terminou em   3º lugar
+Podio da volta 2:
+  0 terminou em   1º lugar
+  1 terminou em   2º lugar
+  3 terminou em   3º lugar
+Podio da volta 3:
+  0 terminou em   1º lugar
+  1 terminou em   2º lugar
+  3 terminou em   3º lugar
+Podio da volta 4:
+  0 terminou em   1º lugar
+  1 terminou em   2º lugar
+  3 terminou em   3º lugar
+Podio da volta 5:
+  0 terminou em   1º lugar
+  1 terminou em   2º lugar
+  3 terminou em   3º lugar
+[BOXES] 0 ficou 15.5 segundos no box.
+[BOXES] 3 ficou 20.0 segundos no box.
+Podio da volta 6:
+  1 terminou em   1º lugar
+  2 terminou em   2º lugar
+  0 terminou em   3º lugar
+[BOXES] 1 ficou 20.0 segundos no box.
+[BOXES] 2 ficou 29.0 segundos no box.
+Podio da volta 7:
+  0 terminou em   1º lugar
+  1 terminou em   2º lugar
+  3 terminou em   3º lugar
+Podio da volta 8:
+  0 terminou em   1º lugar
+  1 terminou em   2º lugar
+  3 terminou em   3º lugar
+Podio da volta 9:
+  0 terminou em   1º lugar
+  1 terminou em   2º lugar
+  3 terminou em   3º lugar
+  0 terminou +25
+  1 terminou +18
+  3 terminou +15
+Podio da volta 10:
+  0 terminou em   1º lugar
+  1 terminou em   2º lugar
+  3 terminou em   3º lugar
+  2 terminou +12
+Classificacao geral por pilotos:
+  1º lugar com 394:   0 [  0]
+  2º lugar com 349:   1 [  0]
+  3º lugar com 343:   3 [  1]
+  4º lugar com 314:   2 [  1]
+Classificacao geral por equipes:
+  1º lugar com 743:   0
+  2º lugar com 657:   1

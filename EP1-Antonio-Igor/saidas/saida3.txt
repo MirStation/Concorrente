@@ -1,0 +1,231 @@
+  6 escolhido
+ 34 escolhido
+ 26 escolhido
+ 10 escolhido
+Classificacao geral por pilotos:
+  1º lugar com  99:  12 [  6]
+  2º lugar com  92:  29 [ 14]
+  3º lugar com  84:   3 [  1]
+  4º lugar com  80:  33 [ 16]
+  5º lugar com  79:  24 [ 12]
+  6º lugar com  78:   2 [  1]
+  7º lugar com  66:  16 [  8]
+  8º lugar com  63:   7 [  3]
+  9º lugar com  62:  19 [  9]
+ 10º lugar com  60:  37 [ 18]
+ 11º lugar com  59:   5 [  2]
+ 12º lugar com  57:  21 [ 10]
+ 13º lugar com  56:   9 [  4]
+ 14º lugar com  56:  18 [  9]
+ 15º lugar com  54:   8 [  4]
+ 16º lugar com  53:  30 [ 15]
+ 17º lugar com  52:  10 [  5]
+ 18º lugar com  51:   4 [  2]
+ 19º lugar com  51:  15 [  7]
+ 20º lugar com  50:  14 [  7]
+ 21º lugar com  50:  27 [ 13]
+ 22º lugar com  49:  38 [ 19]
+ 23º lugar com  48:   6 [  3]
+ 24º lugar com  45:  11 [  5]
+ 25º lugar com  43:  22 [ 11]
+ 26º lugar com  42:  26 [ 13]
+ 27º lugar com  40:  31 [ 15]
+ 28º lugar com  36:   0 [  0]
+ 29º lugar com  32:  20 [ 10]
+ 30º lugar com  31:  34 [ 17]
+ 31º lugar com  29:  28 [ 14]
+ 32º lugar com  28:  32 [ 16]
+ 33º lugar com  27:  39 [ 19]
+ 34º lugar com  26:  17 [  8]
+ 35º lugar com  23:  23 [ 11]
+ 36º lugar com  21:  36 [ 18]
+ 37º lugar com  18:  35 [ 17]
+ 38º lugar com  13:  13 [  6]
+ 39º lugar com  10:  25 [ 12]
+ 40º lugar com   6:   1 [  0]
+Podio da volta 1:
+ 12 terminou em   1º lugar
+ 29 terminou em   2º lugar
+ 33 terminou em   3º lugar
+Podio da volta 2:
+ 12 terminou em   1º lugar
+ 29 terminou em   2º lugar
+  3 terminou em   3º lugar
+Podio da volta 3:
+ 12 terminou em   1º lugar
+  3 terminou em   2º lugar
+ 29 terminou em   3º lugar
+Podio da volta 4:
+ 12 terminou em   1º lugar
+  3 terminou em   2º lugar
+ 29 terminou em   3º lugar
+Podio da volta 5:
+ 12 terminou em   1º lugar
+  3 terminou em   2º lugar
+ 29 terminou em   3º lugar
+[BOXES] 12 ficou 18.0 segundos no box.
+[BOXES] 3 ficou 27.0 segundos no box.
+[BOXES] 29 ficou 34.5 segundos no box.
+[BOXES] 33 ficou 41.5 segundos no box.
+[BOXES] 7 ficou 47.0 segundos no box.
+[BOXES] 37 ficou 53.5 segundos no box.
+[BOXES] 19 ficou 49.0 segundos no box.
+[BOXES] 24 ficou 56.0 segundos no box.
+[BOXES] 21 ficou 53.0 segundos no box.
+[BOXES] 5 ficou 56.0 segundos no box.
+[BOXES] 16 ficou 53.5 segundos no box.
+Podio da volta 6:
+  2 terminou em   1º lugar
+ 12 terminou em   2º lugar
+  3 terminou em   3º lugar
+[BOXES] 15 ficou 55.5 segundos no box.
+[BOXES] 38 ficou 53.5 segundos no box.
+[BOXES] 8 ficou 55.5 segundos no box.
+[BOXES] 30 ficou 52.5 segundos no box.
+[BOXES] 11 ficou 56.5 segundos no box.
+[BOXES] 27 ficou 57.0 segundos no box.
+[BOXES] 0 ficou 59.0 segundos no box.
+[BOXES] 20 ficou 58.0 segundos no box.
+[BOXES] 22 ficou 60.5 segundos no box.
+[BOXES] 28 ficou 59.5 segundos no box.
+[BOXES] 39 ficou 65.5 segundos no box.
+[BOXES] 25 ficou 67.5 segundos no box.
+[BOXES] 13 ficou 69.0 segundos no box.
+[BOXES] 17 ficou 68.5 segundos no box.
+[BOXES] 32 ficou 68.0 segundos no box.
+[BOXES] 35 ficou 67.0 segundos no box.
+[BOXES] 36 ficou 64.5 segundos no box.
+[BOXES] 1 ficou 66.0 segundos no box.
+[BOXES] 2 ficou 60.0 segundos no box.
+[BOXES] 18 ficou 57.0 segundos no box.
+[BOXES] 4 ficou 48.5 segundos no box.
+[BOXES] 9 ficou 50.0 segundos no box.
+[BOXES] 14 ficou 52.0 segundos no box.
+[BOXES] 31 ficou 58.0 segundos no box.
+Podio da volta 7:
+ 12 terminou em   1º lugar
+  3 terminou em   2º lugar
+ 29 terminou em   3º lugar
+[BOXES] 23 ficou 55.0 segundos no box.
+[BOXES] 10 ficou 15.0 segundos no box.
+Podio da volta 8:
+ 12 terminou em   1º lugar
+  3 terminou em   2º lugar
+ 29 terminou em   3º lugar
+[BOXES] 26 ficou 15.5 segundos no box.
+[BOXES] 6 ficou 14.5 segundos no box.
+[BOXES] 34 ficou 15.0 segundos no box.
+Podio da volta 9:
+ 12 terminou em   1º lugar
+  3 terminou em   2º lugar
+ 29 terminou em   3º lugar
+Podio da volta 10:
+ 12 terminou em   1º lugar
+  3 terminou em   2º lugar
+ 29 terminou em   3º lugar
+ 12 terminou +25
+  3 terminou +18
+ 29 terminou +15
+Podio da volta 11:
+ 12 terminou em   1º lugar
+  3 terminou em   2º lugar
+ 29 terminou em   3º lugar
+ 37 terminou +12
+ 19 terminou +10
+  7 terminou + 8
+ 33 terminou + 6
+ 24 terminou + 4
+ 21 terminou + 2
+  5 terminou + 1
+ 15 terminou + 0
+ 16 terminou + 0
+ 38 terminou + 0
+  8 terminou + 0
+ 30 terminou + 0
+  2 terminou + 0
+ 11 terminou + 0
+ 27 terminou + 0
+ 20 terminou + 0
+  0 terminou + 0
+ 22 terminou + 0
+ 28 terminou + 0
+ 18 terminou + 0
+ 39 terminou + 0
+  4 terminou + 0
+ 13 terminou + 0
+ 25 terminou + 0
+ 14 terminou + 0
+ 17 terminou + 0
+  9 terminou + 0
+ 23 terminou + 0
+ 31 terminou + 0
+ 32 terminou + 0
+ 35 terminou + 0
+ 36 terminou + 0
+  1 terminou + 0
+ 10 terminou + 0
+ 26 terminou + 0
+  6 terminou + 0
+ 34 terminou + 0
+Classificacao geral por pilotos:
+  1º lugar com 124:  12 [  6]
+  2º lugar com 107:  29 [ 14]
+  3º lugar com 102:   3 [  1]
+  4º lugar com  86:  33 [ 16]
+  5º lugar com  83:  24 [ 12]
+  6º lugar com  78:   2 [  1]
+  7º lugar com  72:  19 [  9]
+  8º lugar com  72:  37 [ 18]
+  9º lugar com  71:   7 [  3]
+ 10º lugar com  66:  16 [  8]
+ 11º lugar com  60:   5 [  2]
+ 12º lugar com  59:  21 [ 10]
+ 13º lugar com  56:   9 [  4]
+ 14º lugar com  56:  18 [  9]
+ 15º lugar com  54:   8 [  4]
+ 16º lugar com  53:  30 [ 15]
+ 17º lugar com  52:  10 [  5]
+ 18º lugar com  51:   4 [  2]
+ 19º lugar com  51:  15 [  7]
+ 20º lugar com  50:  14 [  7]
+ 21º lugar com  50:  27 [ 13]
+ 22º lugar com  49:  38 [ 19]
+ 23º lugar com  48:   6 [  3]
+ 24º lugar com  45:  11 [  5]
+ 25º lugar com  43:  22 [ 11]
+ 26º lugar com  42:  26 [ 13]
+ 27º lugar com  40:  31 [ 15]
+ 28º lugar com  36:   0 [  0]
+ 29º lugar com  32:  20 [ 10]
+ 30º lugar com  31:  34 [ 17]
+ 31º lugar com  29:  28 [ 14]
+ 32º lugar com  28:  32 [ 16]
+ 33º lugar com  27:  39 [ 19]
+ 34º lugar com  26:  17 [  8]
+ 35º lugar com  23:  23 [ 11]
+ 36º lugar com  21:  36 [ 18]
+ 37º lugar com  18:  35 [ 17]
+ 38º lugar com  13:  13 [  6]
+ 39º lugar com  10:  25 [ 12]
+ 40º lugar com   6:   1 [  0]
+Classificacao geral por equipes:
+  1º lugar com 180:   1
+  2º lugar com 137:   6
+  3º lugar com 136:  14
+  4º lugar com 128:   9
+  5º lugar com 119:   3
+  6º lugar com 114:  16
+  7º lugar com 111:   2
+  8º lugar com 110:   4
+  9º lugar com 101:   7
+ 10º lugar com  97:   5
+ 11º lugar com  93:  12
+ 12º lugar com  93:  15
+ 13º lugar com  93:  18
+ 14º lugar com  92:   8
+ 15º lugar com  92:  13
+ 16º lugar com  91:  10
+ 17º lugar com  76:  19
+ 18º lugar com  66:  11
+ 19º lugar com  49:  17
+ 20º lugar com  42:   0
